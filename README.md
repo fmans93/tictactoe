@@ -10,13 +10,13 @@ This game is designed with security and privacy in mind:
 - ✅ Collects no personal data
 - ✅ No cookies or tracking
 - ✅ No user accounts or passwords
-- ✅ Hosted on secure GitHub Pages (HTTPS)
-- ✅ Open source - you can view all the code
+- ✅ Hosted securely with HTTPS
+- ✅ Open source
 
 ## How to Play
 
 1. Open the game on any device
-2. Take turns placing X's and O's
+2. Take turns placing tacos (🌮) and jalapeños (🌶️)
 3. Get three in a row to win
 4. Click "¡Otra Vez!" to play again
 
