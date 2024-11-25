@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
         move: new Audio('sounds/move.mp3'),
         win: new Audio('sounds/win.mp3'),
         draw: new Audio('sounds/draw.mp3'),
-        buttonClick: new Audio('sounds/click.mp3')
+        button: new Audio('sounds/button.mp3')
     };
 
     // Game state
@@ -17,7 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
         gameActive: true,
         darkMode: false,
         soundEnabled: true,
+        boardState: ['', '', '', '', '', '', '', '', ''],
         boardSize: 3
+    };
+
+    const playerNames = {
+        '🌮': 'Taco',
+        '🌶️': 'Jalapeño'
     };
 
     const winningCombinations = [
@@ -33,18 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreDisplay = document.querySelector('.score-display');
     const soundToggle = document.getElementById('soundToggle');
     const themeToggle = document.getElementById('themeToggle');
-    const playerNames = {
-        '🌮': 'Taco',
-        '🌶️': 'Jalapeño'
-    };
 
     // Initialize the game
     function initializeGame() {
         gameState.currentPlayer = '🌮';
         gameState.gameActive = true;
+        gameState.boardState = ['', '', '', '', '', '', '', '', ''];
         cells.forEach(cell => {
             cell.textContent = '';
             cell.classList.remove('cell-win');
+            cell.classList.remove('pop-in');
             cell.addEventListener('click', handleCellClick, { once: true });
         });
         updateStatusDisplay();
@@ -61,15 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function handleCellClick(event) {
         const cell = event.target;
-        
-        if (!gameState.gameActive || cell.textContent !== '') return;
+        const index = Array.from(cells).indexOf(cell);
+
+        if (!gameState.gameActive || gameState.boardState[index] !== '') return;
 
         // Play move sound
         if (gameState.soundEnabled) {
             sounds.move.play();
         }
 
-        // Place symbol with animation
+        // Update cell and game state
+        gameState.boardState[index] = gameState.currentPlayer;
         cell.textContent = gameState.currentPlayer;
         cell.classList.add('pop-in');
         
@@ -85,13 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function checkWin() {
         return winningCombinations.some(combination => {
             return combination.every(index => {
-                return cells[index].textContent === gameState.currentPlayer;
+                return gameState.boardState[index] === gameState.currentPlayer;
             });
         });
     }
 
     function checkDraw() {
-        return [...cells].every(cell => cell.textContent !== '');
+        return gameState.boardState.every(cell => cell !== '');
     }
 
     function handleWin() {
@@ -135,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     restartButton.addEventListener('click', () => {
         if (gameState.soundEnabled) {
-            sounds.buttonClick.play();
+            sounds.button.play();
         }
         initializeGame();
     });
@@ -153,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize game on load
     initializeGame();
-    loadSounds();
 
     // Preload sounds
     function loadSounds() {
@@ -161,4 +166,5 @@ document.addEventListener('DOMContentLoaded', () => {
             sound.load();
         });
     }
+    loadSounds();
 });

@@ -2,6 +2,28 @@
 
 A fun, Mexican-themed Tic Tac Toe game that's safe and secure to play!
 
+## Features
+
+- 🌮 Play as Taco vs Jalapeño 🌶️
+- 🎨 Dark/Light mode toggle
+- 🔊 Sound effects
+- 🎯 Score tracking
+- 🎉 Victory animations
+- 📱 Mobile-friendly design
+
+## How to Play
+
+1. Open the game in your browser
+2. Take turns placing tacos (🌮) and jalapeños (🌶️)
+3. Get three in a row to win
+4. Click "¡Otra Vez!" to play again
+
+## Controls
+
+- 🌙/☀️ - Toggle dark/light mode
+- 🔊/🔇 - Toggle sound effects
+- ¡Otra Vez! - Restart game
+
 ## Security & Privacy
 
 This game is designed with security and privacy in mind:
@@ -13,22 +35,10 @@ This game is designed with security and privacy in mind:
 - ✅ Hosted securely with HTTPS
 - ✅ Open source
 
-## How to Play
-
-1. Open the game on any device
-2. Take turns placing tacos (🌮) and jalapeños (🌶️)
-3. Get three in a row to win
-4. Click "¡Otra Vez!" to play again
-
 ## Technical Details
 
-- Pure HTML, CSS, and JavaScript
-- No external dependencies (except Google Fonts)
-- Mobile-friendly design
+- Built with HTML, CSS, and JavaScript
+- Uses Google Fonts (Permanent Marker)
+- Canvas Confetti for victory animation
+- Mobile-responsive design
 - Secure content headers
-
-## Try It Out
-
-Visit: https://fmans93.github.io/tictactoe
-
-Or scan the QR code at: https://fmans93.github.io/tictactoe/qr.html
