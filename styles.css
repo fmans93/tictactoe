@@ -146,6 +146,15 @@ h1 {
     transform: translateY(0);
 }
 
+.privacy-notice {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #666;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8);
+}
+
 @media (max-width: 480px) {
     .container {
         padding: 15px;
