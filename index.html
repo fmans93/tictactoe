@@ -5,10 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NO WAY JOSE</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="floating-items">
+        <div class="taco" data-speed="2">🌮</div>
+        <div class="taco" data-speed="3">🌮</div>
+        <div class="jalapeno" data-speed="4">🌶️</div>
+        <div class="jalapeno" data-speed="2.5">🌶️</div>
+        <div class="sombrero" data-speed="1.5">🎭</div>
+        <div class="maracas" data-speed="3.5">🎪</div>
+    </div>
     <div class="container">
-        <h1>NO WAY JOSE</h1>
+        <h1>¡NO WAY JOSE!</h1>
         <div class="game-status" id="status">X's Turn</div>
         <div class="game-board" id="board">
             <div class="cell" data-cell></div>
@@ -21,7 +30,7 @@
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>
         </div>
-        <button id="restartButton">Restart Game</button>
+        <button id="restartButton">¡Otra Vez!</button>
     </div>
     <script src="game.js"></script>
 </body>
