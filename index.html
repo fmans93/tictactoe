@@ -6,6 +6,7 @@
     <title>NO WAY JOSE</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
     <div class="floating-items">
@@ -16,9 +17,17 @@
         <div class="sombrero" data-speed="1.5">🎭</div>
         <div class="maracas" data-speed="3.5">🎪</div>
     </div>
+    
     <div class="container">
+        <div class="controls">
+            <button id="soundToggle" class="control-btn">🔊</button>
+            <button id="themeToggle" class="control-btn">🌙</button>
+        </div>
+        
         <h1>¡NO WAY JOSE!</h1>
-        <div class="game-status" id="status">X's Turn</div>
+        <div class="score-display">🌮 0 - 0 🌶️</div>
+        <div class="game-status" id="status">Taco's Turn</div>
+        
         <div class="game-board" id="board">
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>
@@ -30,8 +39,14 @@
             <div class="cell" data-cell></div>
             <div class="cell" data-cell></div>
         </div>
+        
         <button id="restartButton">¡Otra Vez!</button>
+        
+        <div class="privacy-notice">
+            ⚡️ Safe & Secure: This game runs entirely in your browser and collects no personal data.
+        </div>
     </div>
+    
     <script src="game.js"></script>
 </body>
 </html>

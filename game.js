@@ -1,11 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const board = document.getElementById('board');
-    const cells = document.querySelectorAll('[data-cell]');
-    const status = document.getElementById('status');
-    const restartButton = document.getElementById('restartButton');
-    let currentPlayer = 'X';
-    let gameActive = true;
-    let gameState = ['', '', '', '', '', '', '', '', ''];
+    // Game sounds
+    const sounds = {
+        move: new Audio('sounds/move.mp3'),
+        win: new Audio('sounds/win.mp3'),
+        draw: new Audio('sounds/draw.mp3'),
+        buttonClick: new Audio('sounds/click.mp3')
+    };
+
+    // Game state
+    let gameState = {
+        currentPlayer: '🌮',
+        scores: {
+            '🌮': 0,
+            '🌶️': 0
+        },
+        gameActive: true,
+        darkMode: false,
+        soundEnabled: true,
+        boardSize: 3
+    };
 
     const winningCombinations = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
@@ -13,77 +26,139 @@ document.addEventListener('DOMContentLoaded', () => {
         [0, 4, 8], [2, 4, 6] // Diagonals
     ];
 
-    function handleCellClick(e) {
-        const cell = e.target;
-        const index = Array.from(cells).indexOf(cell);
+    // DOM elements
+    const statusDisplay = document.querySelector('.game-status');
+    const cells = document.querySelectorAll('[data-cell]');
+    const restartButton = document.getElementById('restartButton');
+    const scoreDisplay = document.querySelector('.score-display');
+    const soundToggle = document.getElementById('soundToggle');
+    const themeToggle = document.getElementById('themeToggle');
+    const playerNames = {
+        '🌮': 'Taco',
+        '🌶️': 'Jalapeño'
+    };
 
-        if (gameState[index] !== '' || !gameActive) return;
+    // Initialize the game
+    function initializeGame() {
+        gameState.currentPlayer = '🌮';
+        gameState.gameActive = true;
+        cells.forEach(cell => {
+            cell.textContent = '';
+            cell.classList.remove('cell-win');
+            cell.addEventListener('click', handleCellClick, { once: true });
+        });
+        updateStatusDisplay();
+        updateScoreDisplay();
+    }
 
-        gameState[index] = currentPlayer;
-        cell.textContent = currentPlayer;
-        cell.classList.add(currentPlayer.toLowerCase());
+    function updateStatusDisplay() {
+        statusDisplay.textContent = `${playerNames[gameState.currentPlayer]}'s Turn`;
+    }
 
+    function updateScoreDisplay() {
+        scoreDisplay.textContent = `🌮 ${gameState.scores['🌮']} - ${gameState.scores['🌶️']} 🌶️`;
+    }
+
+    function handleCellClick(event) {
+        const cell = event.target;
+        
+        if (!gameState.gameActive || cell.textContent !== '') return;
+
+        // Play move sound
+        if (gameState.soundEnabled) {
+            sounds.move.play();
+        }
+
+        // Place symbol with animation
+        cell.textContent = gameState.currentPlayer;
+        cell.classList.add('pop-in');
+        
         if (checkWin()) {
-            gameActive = false;
-            status.textContent = `${currentPlayer} Wins!`;
-            status.style.color = currentPlayer === 'X' ? '#ff6b6b' : '#6e8efb';
-            return;
+            handleWin();
+        } else if (checkDraw()) {
+            handleDraw();
+        } else {
+            switchPlayer();
         }
-
-        if (checkDraw()) {
-            gameActive = false;
-            status.textContent = "It's a Draw!";
-            status.style.color = '#666';
-            return;
-        }
-
-        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-        status.textContent = `${currentPlayer}'s Turn`;
     }
 
     function checkWin() {
         return winningCombinations.some(combination => {
             return combination.every(index => {
-                return gameState[index] === currentPlayer;
+                return cells[index].textContent === gameState.currentPlayer;
             });
         });
     }
 
     function checkDraw() {
-        return gameState.every(cell => cell !== '');
+        return [...cells].every(cell => cell.textContent !== '');
     }
 
-    function restartGame() {
-        currentPlayer = 'X';
-        gameActive = true;
-        gameState = ['', '', '', '', '', '', '', '', ''];
-        status.textContent = "X's Turn";
-        status.style.color = '#666';
-        cells.forEach(cell => {
-            cell.textContent = '';
-            cell.classList.remove('x', 'o');
-        });
+    function handleWin() {
+        gameState.gameActive = false;
+        gameState.scores[gameState.currentPlayer]++;
+        
+        if (gameState.soundEnabled) {
+            sounds.win.play();
+        }
+        
+        // Show victory animation
+        showVictoryAnimation();
+        
+        statusDisplay.textContent = `${playerNames[gameState.currentPlayer]} Wins! 🎉`;
+        updateScoreDisplay();
     }
 
-    // Add touch feedback for mobile devices
-    function addTouchFeedback(element) {
-        element.addEventListener('touchstart', () => {
-            element.style.opacity = '0.8';
-        });
-        element.addEventListener('touchend', () => {
-            element.style.opacity = '1';
+    function handleDraw() {
+        gameState.gameActive = false;
+        
+        if (gameState.soundEnabled) {
+            sounds.draw.play();
+        }
+        
+        statusDisplay.textContent = '¡Empate! (Draw!)';
+    }
+
+    function switchPlayer() {
+        gameState.currentPlayer = gameState.currentPlayer === '🌮' ? '🌶️' : '🌮';
+        updateStatusDisplay();
+    }
+
+    function showVictoryAnimation() {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: { y: 0.6 }
         });
     }
 
     // Event Listeners
-    cells.forEach(cell => {
-        cell.addEventListener('click', handleCellClick);
-        addTouchFeedback(cell);
+    restartButton.addEventListener('click', () => {
+        if (gameState.soundEnabled) {
+            sounds.buttonClick.play();
+        }
+        initializeGame();
     });
 
-    restartButton.addEventListener('click', restartGame);
-    addTouchFeedback(restartButton);
+    soundToggle.addEventListener('click', () => {
+        gameState.soundEnabled = !gameState.soundEnabled;
+        soundToggle.textContent = gameState.soundEnabled ? '🔊' : '🔇';
+    });
 
-    // Initialize the game
-    restartGame();
+    themeToggle.addEventListener('click', () => {
+        gameState.darkMode = !gameState.darkMode;
+        document.body.classList.toggle('dark-mode');
+        themeToggle.textContent = gameState.darkMode ? '☀️' : '🌙';
+    });
+
+    // Initialize game on load
+    initializeGame();
+    loadSounds();
+
+    // Preload sounds
+    function loadSounds() {
+        Object.values(sounds).forEach(sound => {
+            sound.load();
+        });
+    }
 });
